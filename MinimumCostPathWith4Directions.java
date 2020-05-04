@@ -30,60 +30,50 @@ class GFG {
 	private static void solve(int[][] arr, int n) {
 	    int[] dx={-1,0,1,0};
         int[] dy={0,1,0,-1};
-
-        int[][] result=new int[n][n];
-        result[0][0] = arr[0][0];
-        for(int i=0; i<n; i++)
-            Arrays.fill(result[i], Integer.MAX_VALUE);
-        result[0][0]=arr[0][0];
-        boolean[][] vis=new boolean[n][n];
-        PriorityQueue<Node> pq = new PriorityQueue<>(10, new Comp());
-        pq.add(new Node(0,0,arr[0][0]));
-        vis[0][0] = true;
-        while(!pq.isEmpty()){
-            Node curNode=pq.poll();
-
-            if((curNode.x==(n-1)) && (curNode.y==(n-1)))
-                break;
-            for(int i =0;i<dx.length; i++){
-                int newX = curNode.x + dx[i];
-                int newY = curNode.y + dy[i];
-                if(!isValid(newX,newY, n))
-                    continue;
-                if(vis[newX][newY])
-                    continue;
-                if(result[newX][newY]> result[curNode.x][curNode.y]+arr[newX][newY])
-                   result[newX][newY] = result[curNode.x][curNode.y]+arr[newX][newY];
-                pq.add(new Node(newX, newY, result[newX][newY]));
-                vis[newX][newY] = true;
+        boolean[][] visited=new boolean[n][n];
+        PriorityQueue<Node> queue = new PriorityQueue<>(new Comp());
+        queue.add(new Node(0,0,arr[0][0]));
+        
+        while(!queue.isEmpty()){
+            Node curNode = queue.poll();
+            if((curNode.x==(n-1)) && (curNode.y==(n-1))){
+                System.out.println(curNode.sum);
+                return;
+            }
+            for(int i=0;i<dx.length;i++){
+                int x = curNode.x+dx[i];
+                int y = curNode.y+dy[i];
+                
+                if(isValid(x,y,n,visited)){
+                    int sum = curNode.sum+arr[x][y];
+                    queue.add(new Node(x,y,sum));
+                    visited[x][y]= true;
+                }
             }
         }
-        System.out.println(result[n-1][n-1]);
-        
-        
-	}
-	static boolean isValid(int x, int y, int n) {
-
-        return ((x>=0) && (y>=0) && (x<n) && (y<n));
     }
-
+    static boolean isValid(int x, int y, int n, boolean[][] visited) {
+        if(x<0 || y<0 || x==n || y==n || visited[x][y])
+            return false;
+        return true;
+    }
+    
 }
+
 class Comp implements Comparator<Node> {
 
     public int compare(Node p1, Node p2) {
 
-        return (p1.currSum-p2.currSum);
+        return (p1.sum-p2.sum);
     }
 }
 class Node {
     int x; 
     int y;
-    //int level;
-    int currSum;
-    Node(int x, int y, int currSum) {
-        this.x=x;
-        this.y=y;
-       // this.level = level;
-        this.currSum = currSum;
+    int sum;
+    Node(int x, int y, int sum) {
+        this.x = x;
+        this.y = y;
+        this.sum = sum;
     }
 }
