@@ -38,27 +38,6 @@ class GFG {
 		    }
 		    
 		    return max;
-		}
-    static int findMinPlatformsInOrderN(int[] arrival, int[] departure, int size){
-        Map<Integer, Character> map = new HashMap<>();
-        for (int i = 0; i < size; i++) { 
-            map.put(arrival[i],'a');
-            map.put(departure[i],'d');
-        } 
-      
-        int result = 0; 
-        int plat_needed = 0; 
-        for (int key=0;key<2360;key++) { 
-            if(map.containsKey(key))
-                if (map.get(key) == 'a') 
-                    plat_needed++; 
-                else
-                    plat_needed--; 
-      
-            if (plat_needed > result) 
-                result = plat_needed; 
-        } 
-        return result; 
 	}
-		}
+   
 }
