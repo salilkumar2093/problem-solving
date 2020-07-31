@@ -1,0 +1,54 @@
+package com.manager.parking;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+//find first done filter, map, reduce/orElse, .limit
+public class JavaStreamPractice {
+	public static void main(String... args) {
+		List<String> strings = Arrays.asList("abc", "abc", "bc", "efg", "abcd", "bc", "jkl");
+		List<Integer> numbers = Arrays.asList(3, 4, 20, 2, 3, 40, 5, 6);
+
+		// List<String> filtered = collect(Collectors.toList());
+		String result = strings.stream().filter(string -> string.equals("bc")).findFirst().orElse("no result");
+		System.out.println(result);
+		List<Integer> filterNumbers = numbers.stream().filter(number -> {
+			if (number > 6)
+				return true;
+			if (number < 3)
+				return true;
+			return false;
+		}).collect(Collectors.toList());
+
+		Optional<Integer> reducedNumbers = numbers.stream().reduce((number1, number2) -> {
+			return number1 + number2;
+			/*
+			 * if (number1 > number2) return number1; else return number2;
+			 */
+		});
+		List<Integer> mappedNumbers = numbers.stream().map(number -> {
+			return number * 3;
+		}).collect(Collectors.toList());
+		System.out.println(filterNumbers + " " + filterNumbers.size());
+
+		System.out.println(reducedNumbers.get() + " " + reducedNumbers.isPresent());
+
+		System.out.println(mappedNumbers + " " + mappedNumbers.size());
+		System.out.println(numbers.stream().max(Integer::compare).get());
+		System.out.println(numbers.stream().min(new MyComp()).get());
+
+
+	}
+}
+
+class MyComp implements Comparator<Integer> {
+
+	@Override
+	public int compare(Integer o1, Integer o2) {
+		return o1 - o2;
+	}
+
+}
