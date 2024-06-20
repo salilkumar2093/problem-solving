@@ -4,6 +4,37 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
+class Solution //New Approach
+{ 
+    //Function to return max value that can be put in knapsack of capacity W.
+    static int knapSack(int W, int wt[], int val[], int n) 
+    { 
+         // your code here 
+        Integer[][] dp = new Integer[n+1][W+1];
+        return getMaxValue(W,wt,val,0,0,dp);
+    } 
+    static int getMaxValue(int W, int[] weight, int[] values, int index, int wSum,Integer[][] dp){
+        int n = weight.length;
+        
+        if(index==n){
+            return 0;   
+        }
+        
+        if(dp[index][wSum]!=null)
+            return dp[index][wSum];
+        
+        int notIncluded=getMaxValue(W, weight, values, index+1, wSum, dp);
+        
+        int included = 0;
+        if(wSum+weight[index]<=W)
+            included = values[index]+getMaxValue(W, weight, values, index+1, wSum+weight[index], dp);
+            
+        dp[index][wSum] = Math.max(included, notIncluded);
+        
+        return dp[index][wSum];
+    }
+}
+
 class GFG {
 	public static void main (String[] args) {
         Scanner sc = new Scanner(System.in);
